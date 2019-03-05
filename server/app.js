@@ -10,12 +10,19 @@ var   app=express(),
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
       	socket.emit('newMessage',{
-           from:'Ishan',
-           text:'hey',
-           createdAt:'10:40 PM'
+      	    from:'admin',                          
+      	    text:'welcome,to chatroom'
+      	})
+      	socket.broadcast.emit('newMessage',{
+      		from:'admin',
+      		text:'new user joined the chatroom'
       	})
       	socket.on('createMessage',(message)=>{
-            console.log(message);
+          io.emit('newMessage',{
+             from:message.from,
+             text:message.text,
+             createdAt:new Date().getTime()
+          })
       	})
       	socket.on('disconnect',()=>{
       		console.log("user disconnected!")
