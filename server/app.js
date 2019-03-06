@@ -3,27 +3,17 @@ const express=require('express'),
       http=require('http'),
       path=require('path'),
       publicPath=path.join(__dirname,'../public'),
-      port=process.env.PORT||3000;
+      port=process.env.PORT||3000,
+      generateMessage=require('../helpers/message')
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server);
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
-      	socket.emit('newMessage',{
-      	    from:'admin',                          
-      	    text:'welcome,to chatroom'
-      	})
-      	socket.broadcast.emit('newMessage',{
-      		from:'admin',
-      		text:'new user joined the chatroom'
-      	})
+      	socket.emit('newMessage',generateMessage('admin','welcome'))
+      	socket.broadcast.emit('newMessage',generateMessage('admin','new user joined!'))
       	socket.on('createMessage',(message)=>{
-          io.emit('newMessage',{
-             from:message.from,
-             text:message.text,
-             createdAt:new Date().getTime()
-          })
-      	})
+          io.emit('newMessage',generateMessage(message.from,message.text))
       	socket.on('disconnect',()=>{
       		console.log("user disconnected!")
       	})
