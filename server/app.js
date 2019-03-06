@@ -4,7 +4,8 @@ const express=require('express'),
       path=require('path'),
       publicPath=path.join(__dirname,'../public'),
       port=process.env.PORT||3000,
-      generateMessage=require('../helpers/message')
+      {generateMessage}=require('../helpers/message'),
+       {generateLocationMessage}=require('../helpers/message');
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server);
@@ -12,13 +13,20 @@ var   app=express(),
       	console.log('new user connected!');
       	socket.emit('newMessage',generateMessage('admin','welcome'))
       	socket.broadcast.emit('newMessage',generateMessage('admin','new user joined!'))
-      	socket.on('createMessage',(message)=>{
+      	socket.on('createMessage',(message,callback)=>{
+      		console.log(message)
           io.emit('newMessage',generateMessage(message.from,message.text))
-      	socket.on('disconnect',()=>{
+          callback('acknowledgement from server!');
+      });
+        socket.on('disconnect',()=>{
       		console.log("user disconnected!")
+      	});
+      	socket.on('createLocationMessage',(coords)=>{
+      	    io.emit('newLocationMessage',generateLocationMessage('admin',coords.lat,coords.lon)) 
       	})
-      })
+      });
+
 app.use(express.static(publicPath));
 server.listen(port,()=>{
 	console.log(`Server is up on ${port}!`)
-})
+});
