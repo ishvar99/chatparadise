@@ -16,7 +16,6 @@ var socket=io();
 socket.on('connect',function(){
 	console.log('connected to server!');
 })
-var d = $('.chat__area');
 socket.on('newMessage',function(message){
 	  var formattedTime=moment(message.createdAt).format('h:mm a');
 	  var template=$("#newMessage-template").html();
@@ -45,6 +44,7 @@ socket.on('disconnect',function(){
 $('#message-form').on('submit',function(e){
 	e.preventDefault();//to prevent page from getting refreshed
 	var text=$('#message-text').val();
+	$('#message-text').val('');
   socket.emit('createMessage',{
 	from:'James',
 	text
