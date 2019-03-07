@@ -2,11 +2,13 @@ var socket=io();
 socket.on('connect',function(){
 	console.log('connected to server!');
 })
+var d = $('.chat__area');
 socket.on('newMessage',function(message){
    console.log(message);
    var li=$('<li></li>');
    li.text(`${message.from}:${message.text}`);
    $('#message-list').append(li);
+d.scrollTop(d.prop("scrollHeight"));
 })
 socket.on('newLocationMessage',function(message){
 	var li=$('<li></li>'),
@@ -15,6 +17,7 @@ socket.on('newLocationMessage',function(message){
    a.attr('href',message.url);
    li.append(a);
   $('#message-list').append(li); 
+  d.scrollTop(d.prop("scrollHeight"));
 })
 socket.on('disconnect',function(){
 	console.log('disconnected from server!')
