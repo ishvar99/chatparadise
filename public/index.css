@@ -106,7 +106,9 @@ button:disabled {
   padding: 10px;
   margin: 10px;
 }
-
+.chat__area{
+  overflow-y: scroll;
+}
 .chat__main {
   display: flex;
   flex-direction: column;
