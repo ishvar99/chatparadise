@@ -8,11 +8,13 @@
 <body>
 	<div class="container">
 	<div class="chat__sidebar">
-		<h3 class="header">PEOPLE</h3>
+		<h3 class="header">People</h3>
 	</div>
 	<div class="chat__main">
 		<div class="chat__area">
-			<ul id="message-list"></ul>
+			<ul id="message-list">
+				
+			</ul>
 		</div>
 		<div class="chat__footer enclose">
 <form id="message-form">
@@ -23,11 +25,36 @@
 	</div>
 	</div>
 </div>
+<script id="newMessage-template" type="text/template">
+	<li class="message">
+		<div class="message__title">
+			<h4>{{from}}</h4>
+			<span>{{createdAt}}</span>
+		</div>
+		<div class="message__body">
+			<p>{{text}}</p>
+		</div>
+	</li>
+</script>
+<script id="locationMessage-template" type="text/template">
+	<li class="message">
+		<div class="message__title">
+			<h4 style="display:inline">{{from}}</h4>
+			<span>{{createdAt}}</span>
+		</div>
+		<div class="message__body">
+			<a href={{url}} target="_blank">MyCurrentLocation</a>
+		</div>
+	</li>
+</script>
 </body>
+
 <script type="text/javascript"src="/socket.io/socket.io.js"></script>
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./moment.js"></script>
+  <script type="text/javascript" src="./mustache.js"></script>
 <script type="text/javascript" src="/index.js"></script>
 </html>

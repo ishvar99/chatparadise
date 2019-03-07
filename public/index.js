@@ -1,23 +1,43 @@
+function scrollToBottom()
+{
+	var d=$('.chat__area');
+	var clientHeight= d.prop('clientHeight');
+	var scrollHeight=d.prop('scrollHeight');
+	var scrollTop=d.prop('scrollTop');
+	var newMessage=$('#message-list').children('li:last-child');
+	var messageHeight=newMessage.innerHeight();
+	var prevHeight=newMessage.prev().innerHeight();
+	var totalHeight=scrollTop+clientHeight+messageHeight+prevHeight;
+	if(totalHeight>=scrollHeight){
+		d.scrollTop(scrollHeight);
+	}
+}
 var socket=io();
 socket.on('connect',function(){
 	console.log('connected to server!');
 })
 var d = $('.chat__area');
 socket.on('newMessage',function(message){
-   console.log(message);
-   var li=$('<li></li>');
-   li.text(`${message.from}:${message.text}`);
-   $('#message-list').append(li);
-d.scrollTop(d.prop("scrollHeight"));
+	  var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var template=$("#newMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           text:message.text
+	  })
+	  $('#message-list').append(html);
+	   scrollToBottom();
 })
 socket.on('newLocationMessage',function(message){
-	var li=$('<li></li>'),
-	    a=$('<a target="_blank">My current Location</a>')
-   li.text(`${message.from}:`);
-   a.attr('href',message.url);
-   li.append(a);
-  $('#message-list').append(li); 
-  d.scrollTop(d.prop("scrollHeight"));
+	  var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var template=$("#locationMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           url:message.url
+	  })
+	  $('#message-list').append(html);
+	   scrollToBottom();
 })
 socket.on('disconnect',function(){
 	console.log('disconnected from server!')

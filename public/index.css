@@ -7,7 +7,8 @@ body {
   font-size: .95rem;
 }
 ul, li {
-  list-style-position: inside;
+  list-style: none;
+  padding-left: 10px;
 }
 
 h3 {
@@ -107,7 +108,11 @@ button:disabled {
   margin: 10px;
 }
 .chat__area{
-  overflow-y: scroll;
+  overflow-y: auto;
+  /*background-color:#e6eaee;*/
+  /*margin: 15px; */
+  border:1px solid #e6eaee;
+  flex-basis: 700px;
 }
 .chat__main {
   display: flex;
@@ -154,6 +159,7 @@ button:disabled {
    }
 .message {
   padding: 10px;
+  margin-left: 50px;
 }
 
 .message__title {
@@ -163,11 +169,13 @@ button:disabled {
 
 .message__title h4 {
   font-weight: 600;
-  margin-right: 10px;
+  font-size: 20px;
+  margin:0 15px 0 0;
 }
 
 .message__title span {
   color: #999;
+  font-size: 20px;
 }
 
 @media (max-width: 600px) {
