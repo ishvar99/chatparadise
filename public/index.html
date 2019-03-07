@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>GBU CHAT PARADISE</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="./index.css">
 </head>
 <body>
-<p> Welcome to chat app</p>
-<ol id="message-list"></ol>
+	<div class="container">
+	<div class="chat__sidebar">
+		<h3 class="header">PEOPLE</h3>
+	</div>
+	<div class="chat__main">
+		<div class="chat__area">
+			<ul id="message-list"></ul>
+		</div>
+		<div class="chat__footer enclose">
 <form id="message-form">
 	<input id="message-text" type="text" name="message">
-	 <button>Submit</button>
+	 <button>Send</button>
 	</form>
 	<button id="send-location">Send Location</button>
+	</div>
+	</div>
+</div>
 </body>
 <script type="text/javascript"src="/socket.io/socket.io.js"></script>
 <script
