@@ -22,7 +22,8 @@ button {
   background: #265f82;
   color: white;
   cursor: pointer;
-  padding: 10px;
+  padding:10px;
+  width:50px;
   transition: background .3s ease;
 }
 
@@ -77,6 +78,7 @@ button:disabled {
 .form-field input, .form-field select {
   border: 1px solid #e1e1e1;
   padding: 10px;
+  width: 210px;
 }
 .chat__sidebar {
   overflow-y: auto;
@@ -182,20 +184,20 @@ button:disabled {
   * {
     font-size: 1rem;
   }
-
+  .chat__main{
+    /*text-align: center;*/
+    /*width: 100%;*/
+  }
   .chat__sidebar {
     display: none;
   }
-  .chat__footer {
+
+  .chat__footer{
     flex-direction: column;
     margin-bottom: 100px;
   }
 
-  .chat__footer form {
+  .chat__footer form{
     margin-bottom: 10px;
-  }
-
-  .chat__footer button {
-    margin-right: 0px;
   }
 }
