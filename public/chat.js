@@ -14,7 +14,16 @@ function scrollToBottom()
 }
 var socket=io();
 socket.on('connect',function(){
-	console.log('connected to server!');
+	var params=$.deparam(window.location.search)
+	socket.emit('join',params,function(err){
+      if(err){
+      		alert(err);
+      	return window.location.href='/';
+      }
+      else{
+      	console.log('No errors!')
+      }
+	})
 })
 socket.on('newMessage',function(message){
 	  var formattedTime=moment(message.createdAt).format('h:mm a');

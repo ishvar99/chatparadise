@@ -5,14 +5,22 @@ const express=require('express'),
       publicPath=path.join(__dirname,'../public'),
       port=process.env.PORT||3000,
       {generateMessage}=require('../helpers/message'),
-       {generateLocationMessage}=require('../helpers/message');
+       {generateLocationMessage}=require('../helpers/message'),
+       isRealString=require('../helpers/validation')
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server);
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
-      	socket.emit('newMessage',generateMessage('Admin','welcome'))
-      	socket.broadcast.emit('newMessage',generateMessage('Admin','new user joined!'))
+        socket.on('join',(params,callback)=>{
+             if(!isRealString(params.name)||!isRealString(params.room)){
+                return  callback('name and room required!')
+             }
+             socket.join(params.room);
+              socket.emit('newMessage',generateMessage('Admin','welcome'))
+        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`));
+           callback();
+        });
       	socket.on('createMessage',(message,callback)=>{
       		console.log(message)
           io.emit('newMessage',generateMessage(message.from,message.text))

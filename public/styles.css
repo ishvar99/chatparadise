@@ -194,7 +194,7 @@ button:disabled {
 
   .chat__footer{
     flex-direction: column;
-    margin-bottom: 100px;
+    margin-bottom: 75px;
   }
 
   .chat__footer form{
