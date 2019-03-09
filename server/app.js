@@ -7,7 +7,7 @@ const express=require('express'),
       {generateMessage}=require('../helpers/message'),
        {generateLocationMessage}=require('../helpers/message'),
        isRealString=require('../helpers/validation'),
-       {Users}=require('../public/users');
+       {Users}=require('../helpers/users');
 
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
@@ -28,18 +28,24 @@ var   app=express(),
            callback();
         });
       	socket.on('createMessage',(message,callback)=>{
-      		console.log(message);
-          io.emit('newMessage',generateMessage(message.from,message.text))
+      	  var user=users.getUser(socket.id);
+          if(user&&isRealString(message.text)){ 
+          io.to(user.room).emit('newMessage',generateMessage(user.name,message.text))
+        }
           callback('acknowledgement from server!');
       });
         socket.on('disconnect',()=>{
-          console.log(socket.id);
-      		var user=users.removeUser(socket.id);
-          socket.to(user.room).emit('updatedUserList',users.getUsersList(user.room));
-          socket.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has left!`))
+          var user=users.removeUser(socket.id);
+          if(user){
+           socket.to(user.room).emit('updatedUserList',users.getUsersList(user.room));
+           socket.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has left!`))
+          }
       	});
       	socket.on('createLocationMessage',(coords)=>{
-      	    io.emit('newLocationMessage',generateLocationMessage('Admin',coords.lat,coords.lon)) 
+            var user=users.getUser(socket.id);
+            if(user){
+      	    io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.lat,coords.lon))
+            } 
       	})
       });
 

@@ -24,10 +24,11 @@ socket.on('connect',function(){
       	console.log('No errors!')
       }
 	});
-	socket.on('updatedUserList',function(users){
+	socket.on('updatedUserList',function(users)
+	{
            var ol=$('<ol></ol>');
            users.forEach(function(user){
-           	ol.append($('<li></li>').text(user))
+           ol.append($('<li></li>').text(user))
            })
            $('#users').html(ol);
 	})
@@ -62,7 +63,6 @@ $('#message-form').on('submit',function(e){
 	var text=$('#message-text').val();
 	$('#message-text').val('');
   socket.emit('createMessage',{
-	from:'James',
 	text
 },function(data){
     console.log(`got it ${data}`)
