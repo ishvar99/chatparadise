@@ -95,19 +95,25 @@ button:disabled {
 .chat__sidebar h3 {
   color: #e6eaee;
   margin: 10px 20px;
-  text-align: left;
+  text-align:center;
 }
 
-.chat__sidebar ul {
-  list-style-type: none;
+.chat__sidebar ol {
+  /*list-style-type: none;*/
+  text-align: center;
+  margin-right: 70px;
+  width: 150px;
+  padding-left:35px;
 }
 
 .chat__sidebar li {
+  margin-right: 50px;
   background: #e6eaee;
   border: 1px solid #e1e1e1;
   border-radius: 5px;
   padding: 10px;
   margin: 10px;
+  /*text-align: center;*/
 }
 .chat__area{
   overflow-y: auto;

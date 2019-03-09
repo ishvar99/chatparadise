@@ -23,6 +23,13 @@ socket.on('connect',function(){
       else{
       	console.log('No errors!')
       }
+	});
+	socket.on('updatedUserList',function(users){
+           var ol=$('<ol></ol>');
+           users.forEach(function(user){
+           	ol.append($('<li></li>').text(user))
+           })
+           $('#users').html(ol);
 	})
 })
 socket.on('newMessage',function(message){
