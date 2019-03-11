@@ -13,8 +13,13 @@ function scrollToBottom()
 	}
 }
 var socket=io();
+var color;
 socket.on('connect',function(){
-	var params=$.deparam(window.location.search)
+	var params=$.deparam(window.location.search);
+	if(params.gender==='male')
+		color='blue';
+	else 
+		color='pink';
 	socket.emit('join',params,function(err){
       if(err){
       		alert(err);
@@ -42,6 +47,7 @@ socket.on('newMessage',function(message){
            text:message.text
 	  })
 	  $('#message-list').append(html);
+	  $('.message p').addClass(color)
 	   scrollToBottom();
 })
 socket.on('newLocationMessage',function(message){

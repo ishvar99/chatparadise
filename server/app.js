@@ -7,8 +7,10 @@ const express=require('express'),
       {generateMessage}=require('../helpers/message'),
        {generateLocationMessage}=require('../helpers/message'),
        isRealString=require('../helpers/validation'),
-       {Users}=require('../helpers/users');
-
+       db=require('../database/db'),
+       {Users}=require('../helpers/users'),
+       person=require('../models/users'),
+       moment =require('moment')
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server),
@@ -19,17 +21,34 @@ var   app=express(),
              if(!isRealString(params.name)||!isRealString(params.room)){
                 return callback('name and room required!');
              }
-             socket.join(params.room);
+             if(params.room!='room1'&&params.room!='room2'&&params.room!='room3')
+              return callback('This room is not yet activated!')
+             var body={id:socket.id,name:params.name,room:params.room,gender:params.gender}
+             person.create(body).
+             then((user)=>{
+             console.log(user);
+                  socket.join(user.room);
              users.removeUser(socket.id);
-             users.addUser(socket.id,params.name,params.room);
-             io.to(params.room).emit('updatedUserList',users.getUsersList(params.room))
+             users.addUser(socket.id,user.name,user.room);
+             io.to(user.room).emit('updatedUserList',users.getUsersList(user.room))
               socket.emit('newMessage',generateMessage('Admin','welcome'))
-        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`));
+        socket.broadcast.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has joined!`));
            callback();
+             })
+             .catch((err)=>{
+              return callback('username taken!');
+             })
+            
         });
       	socket.on('createMessage',(message,callback)=>{
       	  var user=users.getUser(socket.id);
           if(user&&isRealString(message.text)){ 
+              person.findOne({name:user.name}).then((user)=>{
+              user.messages.push({text:message.text});
+              user.save();
+          },(err)=>{
+            console.log(err);
+          })
           io.to(user.room).emit('newMessage',generateMessage(user.name,message.text))
         }
           callback('acknowledgement from server!');

@@ -50,7 +50,7 @@ button:disabled {
   background: -webkit-linear-gradient(125deg, rgba(39,107,130,1) 0%, rgba(49,84,129,1) 100%); /* safari5.1+,chrome10+ */
   background: -o-linear-gradient(125deg, rgba(39,107,130,1) 0%, rgba(49,84,129,1) 100%); /* opera 11.10+ */
   background: -ms-linear-gradient(125deg, rgba(39,107,130,1) 0%, rgba(49,84,129,1) 100%); /* ie10+ */
-  background: linear-gradient(325deg, rgba(39,107,130,1) 0%, rgba(49,84,129,1) 100%); /* w3c */
+  background: linear-gradient(325deg, rgba(43,107,223,1) 0%, rgba(49,84,129,1) 100%); /* w3c */
 }
 
 .centered-form__form {
@@ -183,7 +183,12 @@ button:disabled {
   color: #999;
   font-size: 20px;
 }
-
+.blue{
+  background: blue
+}
+.pink{
+  background:pink
+}
 @media (max-width: 600px) {
   * {
     font-size: 1rem;

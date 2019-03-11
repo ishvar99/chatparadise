@@ -12,15 +12,30 @@
   <div class="centered-form__form">
     <form action="/chat.html">
       <div class="form-field">
-        <h3>Join a Chat<h3>
+        <h3 style="color:purple">Join a Chat<h3>
       </div>
       <div class="form-field">
         <label>Display name</label>
-        <input type="text" name="name" autofocus autocomplete="off" />
+        <input type="text" required name="name" autofocus autocomplete="off" />
       </div>
       <div class="form-field">
         <label>Room name</label>
-        <input type="text" name="room" autocomplete="off" />
+          <select style="width:232px;" name="room">
+  <option value="room1">Room1</option>
+  <option value="room2">Room2</option>
+  <option value="room3">Room3</option>
+</select>
+      </div>
+      <div>
+               <span style="color:green;margin-left:10px">Male</span>
+             <input type="radio"value="male" name="gender" checked="checked" required />
+              <span style="color:magenta;margin-left:75px">Female</span>
+              <input type="radio" value="female" name="gender" autocomplete="off" />
+         <div style="padding-top:20px;padding-left:50px;">
+          <label>I'am not a robot</label>
+        <input type="checkbox" required name="captcha"/>
+        
+      </div>
       </div>
       <div class="form-field">
         <button>Join</button>
