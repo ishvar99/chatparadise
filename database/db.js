@@ -1,3 +1,3 @@
 const db =require('mongoose');
-mongoose.connect(process.env.DATABASEURL||"mongodb://localhost/yelp_camp",{useNewUrlParser: true});
+db.connect(process.env.DATABASEURL||"mongodb://localhost/chat_app",{useNewUrlParser: true});
 module.exports=db;
