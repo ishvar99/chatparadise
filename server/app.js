@@ -6,6 +6,7 @@ const express=require('express'),
       port=process.env.PORT||3000,
       {generateMessage}=require('../helpers/message'),
        {generateLocationMessage}=require('../helpers/message'),
+       {generateLinkMessage}=require('../helpers/message'),
        isRealString=require('../helpers/validation'),
        db=require('../database/db'),
        {Users}=require('../helpers/users'),
@@ -21,38 +22,65 @@ var   app=express(),
              if(!isRealString(params.name)||!isRealString(params.room)){
                 return callback('name and room required!');
              }
+             users.users.forEach((user)=>{
+               if(user.name==params.name)
+                return callback('username taken!!')
+             })
              if(params.room!='room1'&&params.room!='room2'&&params.room!='room3')
               return callback('This room is not yet activated!')
-             var body={id:socket.id,name:params.name,room:params.room,gender:params.gender}
-             person.create(body).
-             then((user)=>{
-             console.log(user);
-                  socket.join(user.room);
+             socket.join(params.room);
              users.removeUser(socket.id);
-             users.addUser(socket.id,user.name,user.room);
-             io.to(user.room).emit('updatedUserList',users.getUsersList(user.room))
+             users.addUser(socket.id,params.name,params.room);
+             io.to(params.room).emit('updatedUserList',users.getUsersList(params.room))
               socket.emit('newMessage',generateMessage('Admin','welcome'))
-        socket.broadcast.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has joined!`));
+        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`));
            callback();
-             })
-             .catch((err)=>{
-              return callback('username taken!');
-             })
-            
+           person.find({}).sort({createdBy:1})
+        .then((persons)=>{
+             console.log(persons)
+             socket.emit('loadMessages',persons);
+        });
         });
       	socket.on('createMessage',(message,callback)=>{
       	  var user=users.getUser(socket.id);
-          if(user&&isRealString(message.text)){ 
-              person.findOne({name:user.name}).then((user)=>{
-              user.messages.push({text:message.text});
-              user.save();
+          if(user&&isRealString(message.text)){
+            var body={
+              id:user.id,
+              name:user.name,
+              room:user.room,
+              message:message.text,
+              createdAt:new Date().getTime(),
+              isLink:false
+            }
+          person.create(body)
+          .then((person)=>{
+             io.to(person.room).emit('newMessage',generateMessage(person.name,person.message))
+             callback('acknowledgement from server!');
           },(err)=>{
             console.log(err);
-          })
-          io.to(user.room).emit('newMessage',generateMessage(user.name,message.text))
+          }) 
         }
-          callback('acknowledgement from server!');
       });
+        socket.on('createLinkMessage',(message)=>{
+             var user=users.getUser(socket.id);
+             var body={
+              id:user.id,
+              name:user.name,
+              room:user.room,
+              message:message.text,
+              createdAt:new Date().getTime(),
+              isLink:true
+            }
+             if(user){
+              person.create(body)
+              .then((person)=>{
+                console.log(person)
+               io.to(person.room).emit('newLinkMessage',generateLinkMessage(person.name,person.message))
+              },(err)=>{
+                 console.log(err);
+              })      
+             }
+        })
         socket.on('disconnect',()=>{
           var user=users.removeUser(socket.id);
           if(user){
@@ -62,12 +90,23 @@ var   app=express(),
       	});
       	socket.on('createLocationMessage',(coords)=>{
             var user=users.getUser(socket.id);
+            var locationObj=generateLocationMessage(person.name,coords.lat,coords.lon);
+            var body={
+              id:user.id,
+              name:user.name,
+              room:user.room,
+              url:locationObj.url,
+              createdAt:new Date().getTime(),
+              isLink:false
+            }
             if(user){
-      	    io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.lat,coords.lon))
+              person.create(body)
+              .then((person)=>{
+                io.to(person.room).emit('newLocationMessage',locationObj);
+              })  	    
             } 
       	})
       });
-
 app.use(express.static(publicPath));
 server.listen(port,()=>{
 	console.log(`Server is up on ${port}!`)

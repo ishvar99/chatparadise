@@ -1,26 +1,15 @@
 const mongoose=require('mongoose');
 var userSchema=new mongoose.Schema({
-    id:{
-    	type:String
-    },
-    name:{
-    	type:String,
-    	unique:true
-    },
-    room:{
-    	type:String
-    },
+    id:String,
+    name:String,
+    room:String,
     gender:String,
-    messages:[
-    {
-       text:{
-       	type:String
-       },
-       createdAt:{
-       	type:Date,
-        default:new Date().getTime()
-       }
-   }
-    ]
+    message:String,
+    url:String,
+    isLink:{
+      type:Boolean,
+      default:false
+    },
+    createdAt:Number
 });
 module.exports=mongoose.model('user',userSchema);

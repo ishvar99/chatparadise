@@ -17,7 +17,7 @@ var color;
 socket.on('connect',function(){
 	var params=$.deparam(window.location.search);
 	if(params.gender==='male')
-		color='blue';
+		color='lightblue';
 	else 
 		color='pink';
 	socket.emit('join',params,function(err){
@@ -38,8 +38,61 @@ socket.on('connect',function(){
            $('#users').html(ol);
 	})
 })
+socket.on('loadMessages',function(users){
+	var template,html;
+	console.log(users)
+	users.forEach((user)=>{
+		if(user.message){
+			if(user.isLink){
+				console.log("link")
+              template=$("#linkMessage-template").html();
+	   html=Mustache.render(template,{
+           from:user.name,
+           createdAt:moment(user.createdAt).format('h:mm a'),
+           url:user.message,
+           display:user.message
+	  });  
+			}
+			else{
+                template=$("#newMessage-template").html();
+	   html=Mustache.render(template,{
+           from:user.name,
+           createdAt:moment(user.createdAt).format('h:mm a'),
+           text:user.message
+	  });
+			}
+	    $('#message-list').append(html);
+           $('.message').addClass(color)
+           scrollToBottom();
+       }
+       else { 
+	   template=$("#locationMessage-template").html();
+	   html=Mustache.render(template,{
+           from:user.name,
+           createdAt:moment(user.createdAt).format('h:mm a'),
+           url:user.url
+	  });
+           $('#message-list').append(html);
+           $('.message').addClass(color);
+           scrollToBottom();    
+       }
+	})
+})
 socket.on('newMessage',function(message){
-	  var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
+	   var formattedTime=moment(message.createdAt).format('h:mm a');
+	   if(regex.test(message.text)){
+	   	var template=$("#locationMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           display:message.text,
+           url:message.text
+	  })
+	  $('#message-list').append(html);
+	   scrollToBottom();
+	   	return;
+	   }
 	  var template=$("#newMessage-template").html();
 	  var html=Mustache.render(template,{
            from:message.from,
@@ -47,7 +100,7 @@ socket.on('newMessage',function(message){
            text:message.text
 	  })
 	  $('#message-list').append(html);
-	  $('.message p').addClass(color)
+	  $('.message').addClass(color)
 	   scrollToBottom();
 })
 socket.on('newLocationMessage',function(message){
@@ -59,6 +112,20 @@ socket.on('newLocationMessage',function(message){
            url:message.url
 	  })
 	  $('#message-list').append(html);
+	  $('.message').addClass(color)
+	   scrollToBottom();
+})
+socket.on('newLinkMessage',function(message){
+	  var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var template=$("#linkMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           display:message.text,
+           url:message.text
+	  })
+	  $('#message-list').append(html);
+	  $('.message').addClass(color)
 	   scrollToBottom();
 })
 socket.on('disconnect',function(){
@@ -66,8 +133,15 @@ socket.on('disconnect',function(){
 })
 $('#message-form').on('submit',function(e){
 	e.preventDefault();//to prevent page from getting refreshed
+	var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
 	var text=$('#message-text').val();
 	$('#message-text').val('');
+	if(regex.test(text)){
+     socket.emit('createLinkMessage',{
+     	text
+     })   
+     return;
+	}
   socket.emit('createMessage',{
 	text
 },function(data){

@@ -164,8 +164,15 @@ button:disabled {
   flex-direction: row;
    }
 .message {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   padding: 10px;
+  width: 200px;
+  opacity: 0.8;
+  border-radius: 10px;
   margin-left: 50px;
+  margin-bottom: 50px;
 }
 
 .message__title {
@@ -175,16 +182,16 @@ button:disabled {
 
 .message__title h4 {
   font-weight: 600;
-  font-size: 20px;
-  margin:0 15px 0 0;
+  font-size: 15px;
+  margin:0 35px 0 0;
 }
 
 .message__title span {
   color: #999;
-  font-size: 20px;
+  font-size: 15px;
 }
-.blue{
-  background: blue
+.lightblue{
+  background: lightblue
 }
 .pink{
   background:pink

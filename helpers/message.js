@@ -1,6 +1,6 @@
 const moment =require('moment');
 const person=require('../models/users')
-var generateMessage=(from,text,color)=>{
+var generateMessage=(from,text)=>{
 	return {
 		from,
 		text,
@@ -15,4 +15,11 @@ var generateLocationMessage=(from,latitude,longitude)=>{
    	createdAt:moment().valueOf()
    }
 }
-module.exports={generateMessage,generateLocationMessage};
+var generateLinkMessage=(from,text)=>{
+   return {
+   	from,
+   	text,
+   	createdAt:moment().valueOf()
+   }
+}
+module.exports={generateMessage,generateLocationMessage,generateLinkMessage};

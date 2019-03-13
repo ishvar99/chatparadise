@@ -21,7 +21,7 @@
 		</div>
 		<div class="chat__footer enclose">
 <form id="message-form">
-	<input id="message-text" type="text" autofocus autocomplete="off" name="message">
+	<textarea style="width:100%;overflow: hidden;font-size: 25px" id="message-text" autocomplete="off" autofocus name="message"></textarea>
 	 <button style="font-size: 20px;padding-right: 5px"><i class="fas fa-paper-plane"></i></button>
 	</form>
 	<button id="send-location" style="font-size: 20px"><i class="fas fa-map-marker-alt"></i></button>
@@ -34,7 +34,7 @@
 			<h4>{{from}}</h4>
 			<span>{{createdAt}}</span>
 		</div>
-		<div class="message__body">
+		<div style="display:flex;flex-wrap:wrap;flex-direction:column" class="message__body">
 			<p>{{text}}</p>
 		</div>
 	</li>
@@ -47,6 +47,17 @@
 		</div>
 		<div class="message__body">
 			<a href={{url}} target="_blank">MyCurrentLocation</a>
+		</div>
+	</li>
+</script>
+<script id="linkMessage-template" type="text/template">
+	<li class="message">
+		<div class="message__title">
+			<h4 style="display:inline">{{from}}</h4>
+			<span>{{createdAt}}</span>
+		</div>
+		<div class="message__body">
+			<a href={{url}} target="_blank">{{display}}</a>
 		</div>
 	</li>
 </script>
