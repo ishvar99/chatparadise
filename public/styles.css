@@ -184,7 +184,9 @@ button:disabled {
   margin-left: 35px;
   margin-bottom: 50px;
 }
-
+.fix{
+  margin-left:70px
+}
 .message__title {
   display: flex;
   margin:10px;
@@ -222,6 +224,9 @@ button:disabled {
   }
   .chat__sidebar {
     display: none;
+  }
+  .fix{
+    margin-left:50px;
   }
   .room{
     text-align: center;
