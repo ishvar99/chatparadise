@@ -26,7 +26,7 @@ var   app=express(),
                if(user.name==params.name)
                 return callback('username taken!!')
              })
-             if(params.room!='room')
+             if(params.room!='lovebites')
               return callback('This room is not yet activated!')
              socket.join(params.room);
              users.removeUser(socket.id);
