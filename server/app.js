@@ -89,7 +89,7 @@ var   app=express(),
       	});
       	socket.on('createLocationMessage',(coords)=>{
             var user=users.getUser(socket.id);
-            var locationObj=generateLocationMessage(person.name,coords.lat,coords.lon);
+            var locationObj=generateLocationMessage(user.name,coords.lat,coords.lon);
             var body={
               id:user.id,
               name:user.name,
