@@ -168,7 +168,8 @@ button:disabled {
   flex-direction: column;
   flex-wrap: wrap;
   padding: 10px;
-  width: 200px;
+  max-width: 250px;
+  height: 100px;
   opacity: 0.8;
   border-radius: 10px;
   margin-left: 50px;
@@ -177,32 +178,38 @@ button:disabled {
 
 .message__title {
   display: flex;
-  margin-bottom: 5px;
+  margin:10px;
 }
 
-.message__title h4 {
+.message__title h4 
+{
+  color:black;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 20px;
   margin:0 35px 0 0;
 }
-
+.message__body{
+  
+  font-family: 'Sniglet', cursive;
+  margin-left:10px;
+}
 .message__title span {
-  color: #999;
-  font-size: 15px;
+  color: grey;
+  font-size: 20px;
 }
 .lightblue{
+  color: darkblue;
+   border:1px solid blue;
   background: lightblue
 }
 .pink{
+  color:purple;
+   border:1px solid magenta;
   background:pink
 }
 @media (max-width: 600px) {
   * {
     font-size: 1rem;
-  }
-  .chat__main{
-    /*text-align: center;*/
-    /*width: 100%;*/
   }
   .chat__sidebar {
     display: none;
