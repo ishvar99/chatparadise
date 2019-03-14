@@ -16,6 +16,9 @@ var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server),
       users=new Users();
+      app.get("/*",(req,res)=>{
+        res.sendFile(path.join(__dirname,'../public/maintainance.html'))
+      });
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
         socket.on('join',(params,callback)=>{
