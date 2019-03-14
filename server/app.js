@@ -26,7 +26,7 @@ var   app=express(),
                if(user.name==params.name)
                 return callback('username taken!!')
              })
-             if(params.room!='room1'&&params.room!='room2'&&params.room!='room3')
+             if(params.room!='room')
               return callback('This room is not yet activated!')
              socket.join(params.room);
              users.removeUser(socket.id);
@@ -37,7 +37,6 @@ var   app=express(),
            callback();
            person.find({}).sort({createdBy:1})
         .then((persons)=>{
-             console.log(persons)
              socket.emit('loadMessages',persons);
         });
         });

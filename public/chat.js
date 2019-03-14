@@ -13,7 +13,7 @@ function scrollToBottom()
 	}
 }
 var socket=io();
-var color;
+var color,count=0;
 socket.on('connect',function(){
 	var params=$.deparam(window.location.search);
 	if(params.gender==='male')
@@ -31,20 +31,22 @@ socket.on('connect',function(){
 	});
 	socket.on('updatedUserList',function(users)
 	{
+		 count=users.length;
+		$(".room").text(`${params.room}`);
+		$(".online").text(`${count} member(s)`)
            var ol=$('<ol></ol>');
            users.forEach(function(user){
            ol.append($('<li></li>').text(user))
            })
            $('#users').html(ol);
+           console.log(count);
 	})
 })
 socket.on('loadMessages',function(users){
 	var template,html;
-	console.log(users)
 	users.forEach((user)=>{
 		if(user.message){
 			if(user.isLink){
-				console.log("link")
               template=$("#linkMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
@@ -132,6 +134,7 @@ socket.on('disconnect',function(){
 	console.log('disconnected from server!')
 })
 $('#message-form').on('submit',function(e){
+
 	e.preventDefault();//to prevent page from getting refreshed
 	var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
 	var text=$('#message-text').val();
@@ -149,7 +152,6 @@ $('#message-form').on('submit',function(e){
 })
 });
 var locationButton=$('#send-location');
-console.log(locationButton)
 locationButton.on('click',function(){
 	if(!navigator.geolocation)
 		return alert('Geolocation not supported by your browser!');
