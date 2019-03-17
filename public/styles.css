@@ -184,7 +184,7 @@ button:disabled {
 }
 .message__title {
   display: flex;
-  margin:10px;
+  margin:5px;
 }
 
 .message__title h4 
@@ -198,11 +198,12 @@ button:disabled {
   word-wrap: break-word;
   overflow-wrap: break-word;
   font-family: 'Sniglet', cursive;
-  margin-left:10px;
+  margin-left:5px;
 }
 .message__title span {
   color: grey;
-  font-size: 20px;
+  margin-top: 2px;
+  font-size: 1.3rem;
 }
 .lightblue{
   color: darkblue;
@@ -220,6 +221,10 @@ button:disabled {
   }
   ul, li {
   padding-left: 15px;
+}
+.message__title span{
+  margin-top: 5px;
+  font-size: 1.08rem;
 }
   .chat__sidebar {
     display: none;

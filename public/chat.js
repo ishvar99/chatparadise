@@ -43,6 +43,7 @@ socket.on('connect',function(){
 	})
 })
 socket.on('loadMessages',function(users){
+	console.log("loading");
 	var template,html;
 	users.forEach((user)=>{
 		if(user.message){
