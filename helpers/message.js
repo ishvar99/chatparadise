@@ -1,5 +1,4 @@
 const moment =require('moment');
-const person=require('../models/users')
 var generateMessage=(from,text)=>{
 	return {
 		from,

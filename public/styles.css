@@ -4,11 +4,10 @@ body {
   padding: 0;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
-  font-size: .95rem;
+  font-size: 1.3rem;
 }
 ul, li {
   list-style: none;
-  padding-left: 10px;
 }
 
 h3 {
@@ -65,7 +64,6 @@ button:disabled {
 .form-field {
   margin: 20px 0;
 }
-
 .form-field > * {
   width: 100%;
 }
@@ -175,12 +173,12 @@ button:disabled {
 .message {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  padding: 10px;
+  padding: 20px;
+  box-sizing: border-box;
   max-width: 300px;
-  height: 100px;
   opacity: 0.8;
   border-radius: 10px;
+  justify-content: space-around;
   margin-left: 15px;
   margin-bottom: 50px;
 }
@@ -196,11 +194,12 @@ button:disabled {
 {
   color:black;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 1.6rem;
   margin:0 35px 0 0;
 }
-.message__body{
-  
+.message__body {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   font-family: 'Sniglet', cursive;
   margin-left:10px;
 }
@@ -222,6 +221,9 @@ button:disabled {
   * {
     font-size: 1.1rem;
   }
+  ul, li {
+  padding-left: 15px;
+}
   .chat__sidebar {
     display: none;
   }

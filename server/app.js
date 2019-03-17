@@ -10,7 +10,7 @@ const express=require('express'),
        isRealString=require('../helpers/validation'),
        db=require('../database/db'),
        {Users}=require('../helpers/users'),
-       person=require('../models/users'),
+       Message=require('../models/message'),
        moment =require('moment')
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
@@ -38,9 +38,9 @@ var   app=express(),
               socket.emit('newMessage',generateMessage('Admin','welcome'))
         socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`));
            callback();
-           person.find({}).sort({createdBy:1})
-        .then((persons)=>{
-             socket.emit('loadMessages',persons);
+           Message.find({}).sort({createdBy:1})
+        .then((messages)=>{
+             socket.emit('loadMessages',messages);
         });
         });
       	socket.on('createMessage',(message,callback)=>{
@@ -54,9 +54,9 @@ var   app=express(),
               createdAt:new Date().getTime(),
               isLink:false
             }
-          person.create(body)
-          .then((person)=>{
-             io.to(person.room).emit('newMessage',generateMessage(person.name,person.message))
+          Message.create(body)
+          .then((message)=>{
+             io.to(message.room).emit('newMessage',generateMessage(message.name,message.message))
              callback('acknowledgement from server!');
           },(err)=>{
             console.log(err);
@@ -74,10 +74,9 @@ var   app=express(),
               isLink:true
             }
              if(user){
-              person.create(body)
-              .then((person)=>{
-                console.log(person)
-               io.to(person.room).emit('newLinkMessage',generateLinkMessage(person.name,person.message))
+              Message.create(body)
+              .then((message)=>{
+               io.to(message.room).emit('newLinkMessage',generateLinkMessage(message.name,message.message))
               },(err)=>{
                  console.log(err);
               })      
@@ -102,9 +101,9 @@ var   app=express(),
               isLink:false
             }
             if(user){
-              person.create(body)
-              .then((person)=>{
-                io.to(person.room).emit('newLocationMessage',locationObj);
+              Message.create(body)
+              .then((message)=>{
+                io.to(message.room).emit('newLocationMessage',locationObj);
               })  	    
             } 
       	})
