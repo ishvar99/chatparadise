@@ -11,7 +11,11 @@ const express=require('express'),
        db=require('../database/db'),
        {Users}=require('../helpers/users'),
        Message=require('../models/message'),
-       moment =require('moment')
+       bodyParser=require('body-parser'),
+       moment =require('moment'),
+       passport=require('passport'),
+       localStrategy=require('passport-local'),
+       passportLocalMongoose=require('passport-local-mongoose');
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server),
@@ -19,6 +23,12 @@ var   app=express(),
       // app.get("/*",(req,res)=>{
       //   res.sendFile(path.join(__dirname,'../public/maintainance.html'))
       // });
+      function isLoggedIn(req,res,next){
+        if(req.isAuthenticated()){
+          return next();
+        }
+        return res.redirect('back')
+      }
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
         socket.on('join',(params,callback)=>{
@@ -33,10 +43,10 @@ var   app=express(),
               return callback('This room is not yet activated!')
              socket.join(params.room);
              users.removeUser(socket.id);
-             users.addUser(socket.id,params.name,params.room);
+             users.addUser(socket.id,params.name,params.room,params.avatar,params.gender);
              io.to(params.room).emit('updatedUserList',users.getUsersList(params.room))
-              socket.emit('newMessage',generateMessage('Admin','welcome'))
-        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`));
+              socket.emit('newMessage',generateMessage('Admin','welcome','Admin'))
+        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`,'Admin'));
            callback();
            Message.find({}).sort({createdBy:1})
         .then((messages)=>{
@@ -50,13 +60,15 @@ var   app=express(),
               id:user.id,
               name:user.name,
               room:user.room,
+              gender:user.gender,
               message:message.text,
               createdAt:new Date().getTime(),
+              avatar: user.avatar,
               isLink:false
             }
           Message.create(body)
           .then((message)=>{
-             io.to(message.room).emit('newMessage',generateMessage(message.name,message.message))
+             io.to(message.room).emit('newMessage',generateMessage(message.name,message.message,message.avatar,message.gender))
              callback('acknowledgement from server!');
           },(err)=>{
             console.log(err);
@@ -69,20 +81,43 @@ var   app=express(),
               id:user.id,
               name:user.name,
               room:user.room,
+              gender:user.gender,
               message:message.text,
+              avatar:user.avatar,
               createdAt:new Date().getTime(),
               isLink:true
             }
              if(user){
               Message.create(body)
               .then((message)=>{
-               io.to(message.room).emit('newLinkMessage',generateLinkMessage(message.name,message.message))
+               io.to(message.room).emit('newLinkMessage',generateLinkMessage(message.name,message.message,message.avatar,message.gender))
+              },(err)=>{
+                 console.log(err);
+              })      
+             }
+        })
+        socket.on('createAdminMessage',(message)=>{
+           var user=users.getUser(socket.id);
+             var body={
+              id:user.id,
+              name:'Admin',
+              room:user.room,
+              message:message.text,
+              avatar:'Admin',
+              createdAt:new Date().getTime(),
+              isLink:false
+            }
+            if(user){
+              Message.create(body)
+              .then((message)=>{
+               io.to(message.room).emit('newAdminMessage',generateMessage('Admin',message.message,message.avatar))
               },(err)=>{
                  console.log(err);
               })      
              }
         })
         socket.on('disconnect',()=>{
+          console.log("disconnect")
           var user=users.removeUser(socket.id);
           if(user){
            socket.to(user.room).emit('updatedUserList',users.getUsersList(user.room));
@@ -91,24 +126,26 @@ var   app=express(),
       	});
       	socket.on('createLocationMessage',(coords)=>{
             var user=users.getUser(socket.id);
-            var locationObj=generateLocationMessage(user.name,coords.lat,coords.lon);
+            var locationObj=generateLocationMessage(user.name,coords.lat,coords.lon,user.avatar,user.gender);
             var body={
               id:user.id,
               name:user.name,
               room:user.room,
+              gender:user.gender,
               url:locationObj.url,
               createdAt:new Date().getTime(),
-              isLink:false
+              isLink:false,
+              avatar:user.avatar
             }
             if(user){
               Message.create(body)
               .then((message)=>{
-                io.to(message.room).emit('newLocationMessage',locationObj);
+                io.to(message.room).emit('newLocationMessage',locationObj,message.avatar,message.gender);
               })  	    
             } 
       	})
       });
-app.use(express.static(publicPath));
+      app.use(express.static(publicPath));
 server.listen(port,()=>{
 	console.log(`Server is up on ${port}!`)
 });

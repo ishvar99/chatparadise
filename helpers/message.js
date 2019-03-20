@@ -1,23 +1,29 @@
 const moment =require('moment');
-var generateMessage=(from,text)=>{
+var generateMessage=(from,text,avatar,gender)=>{
 	return {
 		from,
 		text,
+      avatar,
+      gender,
 		createdAt:moment().valueOf()
 	}
 }
-var generateLocationMessage=(from,latitude,longitude)=>{
+var generateLocationMessage=(from,latitude,longitude,avatar,gender)=>{
 	var url=`https://www.google.com/maps?q=${latitude},${longitude}`;
    return {
    	from,
    	url,
+      avatar,
+      gender,
    	createdAt:moment().valueOf()
    }
 }
-var generateLinkMessage=(from,text)=>{
+var generateLinkMessage=(from,text,avatar,gender)=>{
    return {
    	from,
    	text,
+      avatar,
+      gender,
    	createdAt:moment().valueOf()
    }
 }

@@ -13,20 +13,24 @@ function scrollToBottom()
 	}
 }
 var socket=io();
-var color,count=0;
+var color='lightblue',count=0,avatar;
+var avatarObj={
+	Admin:'./admin.png',
+	a1:'./boy.png',
+	a2:'./girl.png',
+	a3:'./man.png',
+    a4: './girl1.png',
+    a5: './girl2.png',
+    a6: './girl3.png'
+}
+var params;
 socket.on('connect',function(){
-	var params=$.deparam(window.location.search);
-	if(params.gender==='male')
-		color='lightblue';
-	else 
-		color='pink';
+	params=$.deparam(window.location.search);
+	avatar=params.avatar;
 	socket.emit('join',params,function(err){
       if(err){
       		alert(err);
       	return window.location.href='/';
-      }
-      else{
-      	console.log('No errors!')
       }
 	});
 	socket.on('updatedUserList',function(users)
@@ -39,11 +43,10 @@ socket.on('connect',function(){
            ol.append($('<li></li>').text(user))
            })
            $('#users').html(ol);
-           console.log(count);
 	})
-})
-socket.on('loadMessages',function(users){
-	console.log(document.readyState);
+})							
+socket.on('loadMessages',function(users)
+{
 	var template,html;
 	users.forEach((user)=>{
 		if(user.message){
@@ -52,43 +55,58 @@ socket.on('loadMessages',function(users){
 	   html=Mustache.render(template,{
            from:user.name,
            createdAt:moment(user.createdAt).format('h:mm a'),
+           avatar:avatarObj[user.avatar],
            url:user.message,
            display:user.message
 	  });  
 			}
 			else{
-                template=$("#newMessage-template").html();
+				if(user.name==='Admin'){
+					template=$("#newAdminMessage-template").html();
+					 html=Mustache.render(template,{
+           from:user.name,
+           avatar:avatarObj[user.avatar],
+           createdAt:moment(user.createdAt).format('h:mm a'),
+           text:user.message
+	  });
+					 $('#message-list').append(html);
+           scrollToBottom();
+					return;
+				}
+				template=$("#newMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
+           avatar:avatarObj[user.avatar],
+           gender:user.gender,
            createdAt:moment(user.createdAt).format('h:mm a'),
            text:user.message
 	  });
 			}
 	    $('#message-list').append(html);
-           $('.message').addClass(color)
            scrollToBottom();
        }
        else { 
 	   template=$("#locationMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
+           avatar:avatarObj[user.avatar],
            createdAt:moment(user.createdAt).format('h:mm a'),
            url:user.url
 	  });
            $('#message-list').append(html);
-           $('.message').addClass(color);
            scrollToBottom();    
        }
 	})
-})
+});
 socket.on('newMessage',function(message){
 	  var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
 	   var formattedTime=moment(message.createdAt).format('h:mm a');
 	   if(regex.test(message.text)){
-	   	var template=$("#locationMessage-template").html();
+	   	var template=$("#linkMessage-template").html();
 	  var html=Mustache.render(template,{
            from:message.from,
            createdAt:formattedTime,
+           avatar:avatarObj[message.avatar],
            display:message.text,
            url:message.text
 	  })
@@ -99,11 +117,12 @@ socket.on('newMessage',function(message){
 	  var template=$("#newMessage-template").html();
 	  var html=Mustache.render(template,{
            from:message.from,
+           gender:message.gender,
+           avatar:avatarObj[message.avatar],
            createdAt:formattedTime,
            text:message.text
 	  })
 	  $('#message-list').append(html);
-	  $('.message').addClass(color)
 	   scrollToBottom();
 })
 socket.on('newLocationMessage',function(message){
@@ -112,10 +131,11 @@ socket.on('newLocationMessage',function(message){
 	  var html=Mustache.render(template,{
            from:message.from,
            createdAt:formattedTime,
+           avatar:avatarObj[message.avatar],
+           gender:message.gender,
            url:message.url
 	  })
 	  $('#message-list').append(html);
-	  $('.message').addClass(color)
 	   scrollToBottom();
 })
 socket.on('newLinkMessage',function(message){
@@ -124,15 +144,28 @@ socket.on('newLinkMessage',function(message){
 	  var html=Mustache.render(template,{
            from:message.from,
            createdAt:formattedTime,
+           gender:message.gender,
+           avatar:avatarObj[message.avatar],
            display:message.text,
            url:message.text
 	  })
 	  $('#message-list').append(html);
-	  $('.message').addClass(color)
+	   scrollToBottom();
+})
+socket.on('newAdminMessage',function(message){
+	  var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var template=$("#newAdminMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           avatar:avatarObj[message.avatar],
+           text:message.text
+	  })
+	  $('#message-list').append(html);
 	   scrollToBottom();
 })
 socket.on('disconnect',function(){
-	console.log('disconnected from server!')
+	console.log('disconnected from server!');
 })
 $('#message-form').on('submit',function(e){
 
@@ -145,6 +178,12 @@ $('#message-form').on('submit',function(e){
      	text
      })   
      return;
+	}
+	if(params.name==='Admin'){
+		socket.emit('createAdminMessage',{
+			text
+		})
+		return;
 	}
   socket.emit('createMessage',{
 	text

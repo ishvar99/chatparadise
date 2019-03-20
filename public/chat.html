@@ -5,14 +5,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<link href="https://fonts.googleapis.com/css?family=Sniglet" rel="stylesheet">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="./styles.css">
+	<link rel="stylesheet" type="text/css" href="./styles/styles.css">
 </head>
 <body>
 	<div class="container">
 	<div class="chat__sidebar">
 		<h3 class="header">People</h3>
-		<div id="users">
-			
+		<div id="users">	
 		</div>
 	</div>
 	<div class="chat__main">
@@ -24,7 +23,7 @@
 		</div>
 		<div class="chat__footer enclose">
 <form id="message-form">
-	<textarea style="width:100%;overflow: hidden;font-size: 25px" id="message-text" autocomplete="off" autofocus name="message"></textarea>
+	<textarea style="width:100%;overflow: hidden;font-size: 25px" id="message-text" autocomplete="off" autofocus name="message"></textarea>	
 	 <button style="font-size: 20px;padding-right: 5px"><i class="fas fa-paper-plane"></i></button>
 	</form>
 	<button id="send-location" style="font-size: 20px"><i class="fas fa-map-marker-alt"></i></button>
@@ -32,7 +31,12 @@
 	</div>
 </div>
 <script id="newMessage-template" type="text/template">
-	<li class="message">
+	<div style="display:flex;">
+	<div>
+	   <img class="pic" src="{{avatar}}">
+	</div>
+	<div>
+		<li class="message {{gender}}">
 		<div class="message__title">
 			<h4>{{from}}</h4>
 			<span>{{createdAt}}</span>
@@ -41,9 +45,34 @@
 			<p>{{text}}</p>
 		</div>
 	</li>
+	</div>
+	</div>
+</script>
+<script id="newAdminMessage-template" type="text/template">
+	<div style="display:flex;">
+	<div>
+	   <img class="pic" src="{{avatar}}">
+	</div>
+	<div>
+		<li class="message admin">
+		<div class="message__title">
+			<h4>{{from}}</h4>
+			<span>{{createdAt}}</span>
+		</div>
+		<div class="message__body">
+			<p>{{text}}</p>
+		</div>
+	</li>
+	</div>
+	</div>
 </script>
 <script id="locationMessage-template" type="text/template">
-	<li class="message">
+	<div style="display:flex">
+	<div>
+	   <img class="pic" src="{{avatar}}">
+	</div>
+	<div>
+	<li class="message {{gender}}">
 		<div class="message__title">
 			<h4 style="display:inline">{{from}}</h4>
 			<span>{{createdAt}}</span>
@@ -52,9 +81,16 @@
 			<a style="color:red" href={{url}} target="_blank">MyCurrentLocation</a>
 		</div>
 	</li>
+	</div>
+	</div>
 </script>
 <script id="linkMessage-template" type="text/template">
-	<li class="message">
+	<div style="display:flex">
+	<div>
+	   <img class="pic" src="{{avatar}}">
+	</div>
+	<div>
+	<li class="message {{gender}}">
 		<div style="padding-bottom:15px" class="message__title">
 			<h4 style="display:inline">{{from}}</h4>
 			<span>{{createdAt}}</span>
@@ -63,6 +99,8 @@
 			<a style="color:darkgreen" href={{url}} target="_blank">{{display}}</a>
 		</div>
 	</li>
+	</div>
+	</div>
 </script>
 </body>
 
@@ -71,8 +109,8 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-  <script type="text/javascript" src="./moment.js"></script>
-  <script type="text/javascript" src="./mustache.js"></script>
-  <script type="text/javascript" src="./deparam.js"></script>
-<script type="text/javascript" src="/chat.js"></script>
+  <script type="text/javascript" src="./scripts/moment.js"></script>
+  <script type="text/javascript" src="./scripts/mustache.js"></script>
+  <script type="text/javascript" src="./scripts/deparam.js"></script>
+<script type="text/javascript" src="./scripts/chat.js"></script>
 </html>

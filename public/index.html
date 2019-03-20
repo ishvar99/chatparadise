@@ -5,41 +5,76 @@
   <meta charset="utf-8">
   <title>Join | ChatApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./styles/styles.css">
 </head>
 
 <body class="centered-form">
   <div class="centered-form__form">
-    <form action="/chat.html">
+    <form class="form" action="./chat.html">
       <div class="form-field">
-        <h3 style="color:purple">Join a Chat<h3>
+        <h3 style="font-size:30px;color:purple;border:3px solid purple;">Join a Chat<h3>
       </div>
       <div class="form-field">
-        <label>Display name</label>
-        <input placeholder="Enter your name" type="text" required name="name" autofocus autocomplete="off" />
+        <label class='uname' style="color:#ec5900;text-align: center;"><strong>Display name</strong></label>
+        <div style="display: flex;">
+            <input style="border-color:blue; border-width:3px 0px 3px 3px;outline: none;" placeholder="Enter your name" type="text" required name="name" autofocus autocomplete="off"  />
+         <span style=""><i style="font-size: 20px;margin:0;padding:10px;background:white;border:3px solid blue;border-left:0px" class="fas fa-user"></i></span>
+        </div>
       </div>
       <div class="form-field">
-        <label>Room name</label>
-          <select style="width:232px;" name="room">
+        <label style="color:#ec5900;text-align: center;"><strong>Room name</strong></label>
+          <select style="width:232px;height:46px;border:3px solid blue" name="room">
   <option value="lovebites">LOVEBITES</option>
 </select>
       </div>
       <div>
-               <span style="color:green;margin-left:10px">Male</span>
+               <span style="color:green;margin-left:10px"><strong>Male</strong></span>
              <input type="radio"value="male" name="gender" checked="checked" required />
-              <span style="color:magenta;margin-left:46px;">Female</span>
+              <span style="color:green;margin-left:42px;"><strong>Female</strong></span>
               <input type="radio" value="female" name="gender" autocomplete="off" />
-         <div style="padding-top:20px;padding-left:40px;">
-          <label>I'am not a robot</label>
+              <div class="form-field">
+                <label style="color:#ec5900;text-align: center;"><strong>Choose your Avatar</strong></label>
+                <div style="justify-content:space-around; display: flex;flex-wrap: wrap;">
+                <img onclick="addBorder(this)" class="pic border" id="a1" src="./boy.png">
+                <img onclick="addBorder(this)" class="pic" id="a2" src="./girl.png">
+                <img onclick="addBorder(this)" class="pic" id="a3" src="./man.png">
+                <img onclick="addBorder(this)"  class="pic" id="a4" src="./girl1.png">
+                <img onclick="addBorder(this)"  class="pic" id="a5" src="./girl2.png">
+                <img onclick="addBorder(this)" class="pic" id="a6" src="./girl3.png">
+                </div>
+              </div>
+         <div style="padding-top:20px;padding-left: 35px;">
+          <label style="color:purple"><strong>I'am not a robot</strong></label>
         <input type="checkbox" required name="captcha"/>
-        
       </div>
       </div>
       <div class="form-field">
-        <button style="height: 50px;">Join</button>
+        <input style="display:none;width:205px;height:25px;border:3px solid blue" class="avatar" type="text" name="avatar">
+      </div>
+      <div class="form-field">
+        <button type="submit" onclick="checkSelectedImage()" style="height: 50px;">Join</button>
       </div>
     </form>
   </div>
 </body>
-
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+  function addBorder(e){
+    $('.pic').removeClass('border');
+    $(e).addClass('border')
+  }
+  function checkSelectedImage(){
+    var name=$('.uname');
+    console.log(name)
+    var x=$('.pic');
+    $.each(x,function(index,val){
+      if($(val).hasClass('border'))
+       $('.avatar').val(val.id);
+    })
+  }
+</script>
 </html>

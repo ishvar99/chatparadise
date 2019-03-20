@@ -1,10 +1,11 @@
 const mongoose=require('mongoose');
-var userSchema=new mongoose.Schema({
+var messageSchema=new mongoose.Schema({
     id:String,
     name:String,
     room:String,
     gender:String,
     message:String,
+    avatar:String,
     url:String,
     isLink:{
       type:Boolean,
@@ -12,4 +13,4 @@ var userSchema=new mongoose.Schema({
     },
     createdAt:Number
 });
-module.exports=mongoose.model('user',userSchema);
+module.exports=mongoose.model('message',messageSchema);
