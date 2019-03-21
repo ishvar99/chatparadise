@@ -68,7 +68,8 @@ var   app=express(),
             }
           Message.create(body)
           .then((message)=>{
-             io.to(message.room).emit('newMessage',generateMessage(message.name,message.message,message.avatar,message.gender))
+             io.to(message.room).emit('newMessage',generateMessage(message.name,message.message,message.avatar,message.gender));
+             socket.broadcast.to(message.room).emit('notificationSound');
              callback('acknowledgement from server!');
           },(err)=>{
             console.log(err);
