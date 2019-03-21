@@ -53,6 +53,7 @@ button:disabled {
   border-radius: 5px;
   padding: 0px 40px;
   margin: 20px;
+
   width: 230px;
 }
 
@@ -348,6 +349,9 @@ flex-basis:20%;
   }
   ul, li {
   padding-left: 15px;
+}
+.centered-form__form{
+  margin-top: 150px;
 }
 .form-field input{
   width: 170px;
