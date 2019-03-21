@@ -32,14 +32,14 @@
 </div>
 <script id="newMessage-template" type="text/template">
 	<div style="display:flex;">
-	<div>
-	   <img class="pic" src="{{avatar}}">
+	<div style="display:flex;flex-direction:column">
+	   <span>{{createdAt}}</span>
+	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
 	</div>
-	<div>
-		<li class="message {{gender}}">
+	<div class="message">
+		<li class="{{gender}}">
 		<div class="message__title">
 			<h4>{{from}}</h4>
-			<span>{{createdAt}}</span>
 		</div>
 		<div class="message__body">
 			<p>{{text}}</p>
@@ -50,14 +50,14 @@
 </script>
 <script id="newAdminMessage-template" type="text/template">
 	<div style="display:flex;">
-	<div>
-	   <img class="pic" src="{{avatar}}">
+	<div style="display:flex;flex-direction:column">
+		<span>{{createdAt}}</span>
+	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
 	</div>
-	<div>
-		<li class="message admin">
+	<div class="message">
+		<li class="admin">
 		<div class="message__title">
 			<h4>{{from}}</h4>
-			<span>{{createdAt}}</span>
 		</div>
 		<div class="message__body">
 			<p>{{text}}</p>
@@ -68,14 +68,14 @@
 </script>
 <script id="locationMessage-template" type="text/template">
 	<div style="display:flex">
-	<div>
-	   <img class="pic" src="{{avatar}}">
+	<div style="display:flex;flex-direction:column">
+		<span>{{createdAt}}</span>
+	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
 	</div>
-	<div>
-	<li class="message {{gender}}">
-		<div class="message__title">
+	<div class="message">
+	<li class="{{gender}}">
+		<div style="padding-bottom:30px" class="message__title">
 			<h4 style="display:inline">{{from}}</h4>
-			<span>{{createdAt}}</span>
 		</div>
 		<div class="message__body">
 			<a style="color:red" href={{url}} target="_blank">MyCurrentLocation</a>
@@ -86,14 +86,14 @@
 </script>
 <script id="linkMessage-template" type="text/template">
 	<div style="display:flex">
-	<div>
-	   <img class="pic" src="{{avatar}}">
+	<div style="display:flex;flex-direction:column">
+		<span>{{createdAt}}</span>
+	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
 	</div>
-	<div>
-	<li class="message {{gender}}">
-		<div style="padding-bottom:15px" class="message__title">
+	<div class="message">
+	<li class="{{gender}}">
+		<div style="padding-bottom:30px" class="message__title">
 			<h4 style="display:inline">{{from}}</h4>
-			<span>{{createdAt}}</span>
 		</div>
 		<div class="message__body">
 			<a style="color:darkgreen" href={{url}} target="_blank">{{display}}</a>

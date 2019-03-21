@@ -13,7 +13,7 @@ function scrollToBottom()
 	}
 }
 var socket=io();
-var color='lightblue',count=0,avatar;
+var count=0,avatar;
 var avatarObj={
 	Admin:'./admin.png',
 	a1:'./boy.png',
@@ -54,6 +54,7 @@ socket.on('loadMessages',function(users)
               template=$("#linkMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
+           gender:user.gender,
            createdAt:moment(user.createdAt).format('h:mm a'),
            avatar:avatarObj[user.avatar],
            url:user.message,
@@ -89,6 +90,7 @@ socket.on('loadMessages',function(users)
 	   template=$("#locationMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
+           gender:user.gender,
            avatar:avatarObj[user.avatar],
            createdAt:moment(user.createdAt).format('h:mm a'),
            url:user.url

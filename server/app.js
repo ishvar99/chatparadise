@@ -45,8 +45,8 @@ var   app=express(),
              users.removeUser(socket.id);
              users.addUser(socket.id,params.name,params.room,params.avatar,params.gender);
              io.to(params.room).emit('updatedUserList',users.getUsersList(params.room))
-              socket.emit('newMessage',generateMessage('Admin','welcome','Admin'))
-        socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined!`,'Admin'));
+              socket.emit('newAdminMessage',generateMessage('Admin','welcome','Admin'))
+        socket.broadcast.to(params.room).emit('newAdminMessage',generateMessage('Admin',`${params.name} has joined!`,'Admin'));
            callback();
            Message.find({}).sort({createdBy:1})
         .then((messages)=>{
