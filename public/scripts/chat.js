@@ -22,7 +22,10 @@ var avatarObj={
     a4: './girl1.png',
     a5: './girl2.png',
     a6: './girl3.png'
-}
+},
+ sound = new Howl({
+      src: ['/definite.mp3']
+    });
 var params;
 socket.on('connect',function(){
 	params=$.deparam(window.location.search);
@@ -100,6 +103,9 @@ socket.on('loadMessages',function(users)
        }
 	})
 });
+socket.on('notificationSound',function(){
+	sound.play();
+})
 socket.on('newMessage',function(message){
 	  var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
 	   var formattedTime=moment(message.createdAt).format('h:mm a');
@@ -190,6 +196,9 @@ $('#message-form').on('submit',function(e){
   socket.emit('createMessage',{
 	text
 },function(data){
+	 var sound = new Howl({
+      src: ['/sent.mp3']
+    }).play();
     console.log(`got it ${data}`)
 })
 });
