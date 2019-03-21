@@ -25,16 +25,16 @@
 <form id="message-form">
 	<textarea style="width:100%;overflow: hidden;font-size: 25px" id="message-text" autocomplete="off" autofocus name="message"></textarea>	
 	 <button style="font-size: 20px;padding-right: 5px"><i class="fas fa-paper-plane"></i></button>
-	</form>
+	</form>		
 	<button id="send-location" style="font-size: 20px"><i class="fas fa-map-marker-alt"></i></button>
 	</div>
 	</div>
 </div>
 <script id="newMessage-template" type="text/template">
 	<div style="display:flex;">
-	<div style="display:flex;flex-direction:column">
+	<div class="avatar">
 	   <span>{{createdAt}}</span>
-	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
+	   <img class="pic" src="{{avatar}}">
 	</div>
 	<div class="message">
 		<li class="{{gender}}">
@@ -50,9 +50,9 @@
 </script>
 <script id="newAdminMessage-template" type="text/template">
 	<div style="display:flex;">
-	<div style="display:flex;flex-direction:column">
+	<div class="avatar">
 		<span>{{createdAt}}</span>
-	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
+	   <img class="pic" src="{{avatar}}">
 	</div>
 	<div class="message">
 		<li class="admin">
@@ -68,9 +68,9 @@
 </script>
 <script id="locationMessage-template" type="text/template">
 	<div style="display:flex">
-	<div style="display:flex;flex-direction:column">
+	<div class="avatar">
 		<span>{{createdAt}}</span>
-	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
+	   <img class="pic" src="{{avatar}}">
 	</div>
 	<div class="message">
 	<li class="{{gender}}">
@@ -86,9 +86,9 @@
 </script>
 <script id="linkMessage-template" type="text/template">
 	<div style="display:flex">
-	<div style="display:flex;flex-direction:column">
+	<div class="avatar">
 		<span>{{createdAt}}</span>
-	   <img style="flex-grow:0.1" class="pic" src="{{avatar}}">
+	   <img class="pic" src="{{avatar}}">
 	</div>
 	<div class="message">
 	<li class="{{gender}}">

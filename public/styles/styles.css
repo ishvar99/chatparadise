@@ -308,10 +308,11 @@ position: absolute;
   font-family: 'Sniglet', cursive;
   margin-left:5px;
 }
-.message__title span {
+.avatar span {
   color: grey;
   margin-top: 2px;
-  font-size: 1.3rem;
+  font-size: 15px;
+  text-align: center;
 }
 .male{
   color: darkblue;
@@ -326,6 +327,12 @@ position: absolute;
 .admin{
   color: darkgreen;
   /*background: lightgreen;*/
+}
+.avatar{
+  display:flex;
+  flex-direction:column;
+  height:250px;
+  width:65px;
 }
 .pic{
   height: 50px;
@@ -348,7 +355,7 @@ flex-basis:20%;
     font-size: 1.1rem;
   }
   ul, li {
-  padding-left: 15px;
+  padding-left: 5px;
 }
 .centered-form__form{
   margin-top: 150px;
@@ -357,9 +364,8 @@ flex-basis:20%;
   width: 170px;
   height: 20px;
 }
-.message__title span{
-  margin-top: 5px;
-  font-size: 1.08rem;
+.avatar span{
+  /*margin-top: 5px;*/
 }
   .chat__sidebar {
     display: none;
