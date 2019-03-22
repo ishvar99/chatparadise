@@ -92,8 +92,19 @@ socket.on('loadMessages',function(users)
 	    $('#message-list').append(html);
            scrollToBottom();
        }
-       else { 
-	   template=$("#locationMessage-template").html();
+       else {
+       if(user.imageURL){
+          template=$("#imageMessage-template").html();
+	   html=Mustache.render(template,{
+           from:user.name,
+           gender:user.gender,
+           avatar:avatarObj[user.avatar],
+           createdAt:moment(user.createdAt).format('h:mm a'),
+           imageURL:user.imageURL
+	  });
+       }
+       else{
+           template=$("#locationMessage-template").html();
 	   html=Mustache.render(template,{
            from:user.name,
            gender:user.gender,
@@ -101,6 +112,7 @@ socket.on('loadMessages',function(users)
            createdAt:moment(user.createdAt).format('h:mm a'),
            url:user.url
 	  });
+          }
            $('#message-list').append(html);
            scrollToBottom();    
        }
