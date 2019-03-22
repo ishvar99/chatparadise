@@ -23,8 +23,11 @@ var avatarObj={
     a5: './girl2.png',
     a6: './girl3.png'
 },
- sound = new Howl({
+ sound1 = new Howl({
       src: ['/definite.mp3']
+    }),
+ sound2 = new Howl({
+      src: ['/sent.mp3']
     });
 var params;
 socket.on('connect',function(){
@@ -104,7 +107,7 @@ socket.on('loadMessages',function(users)
 	})
 });
 socket.on('notificationSound',function(){
-	sound.play();
+	sound1.play();
 })
 socket.on('newMessage',function(message){
 	  var regex=/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
@@ -171,10 +174,28 @@ socket.on('newAdminMessage',function(message){
 	  })
 	  $('#message-list').append(html);
 	   scrollToBottom();
-})
+});
+socket.on('newImageMessage',(message)=>{
+	 var formattedTime=moment(message.createdAt).format('h:mm a');
+	  var template=$("#imageMessage-template").html();
+	  var html=Mustache.render(template,{
+           from:message.from,
+           createdAt:formattedTime,
+           gender:message.gender,
+           avatar:avatarObj[message.avatar],
+           imageURL:message.imageURL
+	  })
+	  $('#message-list').append(html);
+	   scrollToBottom();
+	});
 socket.on('disconnect',function(){
 	console.log('disconnected from server!');
-})
+});
+// $('#message-text').on('keyup',function(){
+//     var sound = new Howl({
+//       src: ['/sent.mp3']
+//     }).play();
+// })
 $('#message-form').on('submit',function(e){
 
 	e.preventDefault();//to prevent page from getting refreshed
@@ -182,12 +203,14 @@ $('#message-form').on('submit',function(e){
 	var text=$('#message-text').val();
 	$('#message-text').val('');
 	if(regex.test(text)){
+		sound2.play();
      socket.emit('createLinkMessage',{
      	text
      })   
      return;
 	}
 	if(params.name==='Admin'){
+		sound2.play();
 		socket.emit('createAdminMessage',{
 			text
 		})
@@ -196,14 +219,20 @@ $('#message-form').on('submit',function(e){
   socket.emit('createMessage',{
 	text
 },function(data){
-	 var sound = new Howl({
-      src: ['/sent.mp3']
-    }).play();
+	 sound2.play();
     console.log(`got it ${data}`)
 })
 });
-var locationButton=$('#send-location');
-locationButton.on('click',function(){
+$('#file-upload').on('change',function(e){
+	sound2.play();
+	var file=e.originalEvent.target.files[0];
+ 		var reader=new FileReader();
+ 		reader.onload=function(evt){
+ 			socket.emit('createImageMessage',evt.target.result)
+ 		};
+ 		reader.readAsDataURL(file);
+});
+$('#send-location').on('click',function(){
 	if(!navigator.geolocation)
 		return alert('Geolocation not supported by your browser!');
 	navigator.geolocation.getCurrentPosition(function(position){
@@ -211,7 +240,8 @@ locationButton.on('click',function(){
           	lat:position.coords.latitude,
           	lon:position.coords.longitude
           }
-          socket.emit('createLocationMessage',pos)
+          sound2.play();
+          socket.emit('createLocationMessage',pos);
 	},function(){
 		alert('user denied permission!')
 	});

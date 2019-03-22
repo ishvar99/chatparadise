@@ -7,6 +7,7 @@ var messageSchema=new mongoose.Schema({
     message:String,
     avatar:String,
     url:String,
+    imageURL:String,
     isLink:{
       type:Boolean,
       default:false

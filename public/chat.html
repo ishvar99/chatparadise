@@ -24,9 +24,13 @@
 		<div class="chat__footer enclose">
 <form id="message-form">
 	<textarea style="width:100%;overflow: hidden;font-size: 25px" id="message-text" autocomplete="off" autofocus name="message"></textarea>	
-	 <button style="font-size: 20px;padding-right: 5px"><i class="fas fa-paper-plane"></i></button>
+	 <button class="btn" style="font-size: 20px;padding-right: 5px"><i class="fas fa-paper-plane"></i></button>
 	</form>		
-	<button id="send-location" style="font-size: 20px"><i class="fas fa-map-marker-alt"></i></button>
+	<button class="btn" id="send-location" style="font-size: 20px;margin-right: 10px;"><i class="fas fa-map-marker-alt"></i></button>
+	  <label style="text-align: center" for="file-upload" class="btn">
+    <i style="padding-top: 25px;" class="fas fa-paperclip"></i>
+</label>
+<input id="file-upload" type="file"/>
 	</div>
 	</div>
 </div>
@@ -102,8 +106,25 @@
 	</div>
 	</div>
 </script>
+<script id="imageMessage-template" type="text/template">
+	<div style="display:flex">
+	<div class="avatar">
+		<span>{{createdAt}}</span>
+	   <img class="pic" src="{{avatar}}">
+	</div>
+	<div class="message">
+	<li class="{{gender}}">
+		<div style="padding-bottom:30px" class="message__title">
+			<h4 style="display:inline">{{from}}</h4>
+		</div>
+		<div class="message__body">
+			<img class="img img-border" alt="image cannot be loaded" src="{{imageURL}}">
+		</div>
+	</li>
+	</div>
+	</div>
+</script>
 </body>
-
 <script type="text/javascript"src="/socket.io/socket.io.js"></script>
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -112,6 +133,6 @@
   <script type="text/javascript" src="./scripts/moment.js"></script>
   <script type="text/javascript" src="./scripts/mustache.js"></script>
   <script type="text/javascript" src="./scripts/deparam.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
+  <script type="text/javascript" src="./howler.min.js"></script>
 <script type="text/javascript" src="./scripts/chat.js"></script>
 </html>

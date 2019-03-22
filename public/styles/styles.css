@@ -16,7 +16,7 @@ h3 {
   font-size: 1.5rem;
 }
 
-button {
+.btn {
   border: none;
   background: #265f82;
   color: white;
@@ -26,14 +26,13 @@ button {
   transition: background .3s ease;
 }
 
-button:hover {
+.btn:hover {
   border: none;
   background: #1F4C69;
   color: white;
-  padding: 10px;
 }
 
-button:disabled {
+.btn:disabled {
   cursor: default;
   background: #698ea5;
 }
@@ -278,18 +277,6 @@ position: absolute;
   border-right-color: #ffcffd;
   border-width: 20px;
 }
-/*.message .female:after {
-  border-color: rgba(255,192, 203, 0);
-  border-right-color: #ffc0cb;
-  border-width: 20px;
-  margin-top: -50px;
-}
-.message .female:before {
-  border-color: rgba(255, 199, 251, 0);
-  border-right-color:#ffc7fb;
-  border-width: 20px;
-  margin-top: -50px;
-}*/
 .message__title {
   display: flex;
   margin:5px;
@@ -327,6 +314,18 @@ position: absolute;
 .admin{
   color: darkgreen;
   /*background: lightgreen;*/
+}
+.img{
+  height:200px;
+  width: 200px;
+  text-align: center;
+}
+.img-border{
+  border: 4px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+}
+input[type="file"] {
+    display: none;
 }
 .avatar{
   display:flex;

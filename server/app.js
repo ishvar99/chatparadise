@@ -7,6 +7,7 @@ const express=require('express'),
       {generateMessage}=require('../helpers/message'),
        {generateLocationMessage}=require('../helpers/message'),
        {generateLinkMessage}=require('../helpers/message'),
+       {generateImageMessage}=require('../helpers/message'),
        isRealString=require('../helpers/validation'),
        db=require('../database/db'),
        {Users}=require('../helpers/users'),
@@ -91,7 +92,8 @@ var   app=express(),
              if(user){
               Message.create(body)
               .then((message)=>{
-               io.to(message.room).emit('newLinkMessage',generateLinkMessage(message.name,message.message,message.avatar,message.gender))
+               io.to(message.room).emit('newLinkMessage',generateLinkMessage(message.name,message.message,message.avatar,message.gender));
+               socket.broadcast.to(message.room).emit('notificationSound');
               },(err)=>{
                  console.log(err);
               })      
@@ -111,7 +113,8 @@ var   app=express(),
             if(user){
               Message.create(body)
               .then((message)=>{
-               io.to(message.room).emit('newAdminMessage',generateMessage('Admin',message.message,message.avatar))
+               io.to(message.room).emit('newAdminMessage',generateMessage('Admin',message.message,message.avatar));
+               socket.broadcast.to(message.room).emit('notificationSound');
               },(err)=>{
                  console.log(err);
               })      
@@ -125,6 +128,28 @@ var   app=express(),
            socket.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has left!`))
           }
       	});
+        socket.on('createImageMessage',(image)=>{
+          var user=users.getUser(socket.id);
+             var body={
+              id:user.id,
+              name:user.name,
+              room:user.room,
+              gender:user.gender,
+              avatar:user.avatar,
+              imageURL:image,
+              createdAt:new Date().getTime(),
+              isLink:false
+            }
+             if(user){
+              Message.create(body)
+              .then((message)=>{
+                io.to(user.room).emit('newImageMessage',generateImageMessage(message.name,message.imageURL,message.avatar,message.gender));
+                socket.broadcast.to(message.room).emit('notificationSound');
+              },(err)=>{
+                 console.log(err);
+              })      
+             }
+            });
       	socket.on('createLocationMessage',(coords)=>{
             var user=users.getUser(socket.id);
             var locationObj=generateLocationMessage(user.name,coords.lat,coords.lon,user.avatar,user.gender);
@@ -142,9 +167,11 @@ var   app=express(),
               Message.create(body)
               .then((message)=>{
                 io.to(message.room).emit('newLocationMessage',locationObj,message.avatar,message.gender);
+                socket.broadcast.to(message.room).emit('notificationSound');
               })  	    
             } 
-      	})
+      	});
+
       });
       app.use(express.static(publicPath));
 server.listen(port,()=>{

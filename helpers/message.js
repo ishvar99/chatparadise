@@ -27,4 +27,13 @@ var generateLinkMessage=(from,text,avatar,gender)=>{
    	createdAt:moment().valueOf()
    }
 }
-module.exports={generateMessage,generateLocationMessage,generateLinkMessage};
+var generateImageMessage=(from,imageURL,avatar,gender)=>{
+   return {
+      from,
+      imageURL,
+      avatar,
+      gender,
+      createdAt:moment().valueOf()
+   }
+}
+module.exports={generateMessage,generateLocationMessage,generateLinkMessage,generateImageMessage};
