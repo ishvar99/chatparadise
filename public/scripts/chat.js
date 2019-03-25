@@ -32,6 +32,10 @@ var avatarObj={
 var params;
 socket.on('connect',function(){
 	params=$.deparam(window.location.search);
+	 socket.emit('authentication', {username: "John", password: "secret"});
+  socket.on('authenticated', function() {
+    // use the socket as usual
+  });
 	avatar=params.avatar;
 	socket.emit('join',params,function(err){
       if(err){
@@ -235,6 +239,7 @@ $('#message-form').on('submit',function(e){
     console.log(`got it ${data}`)
 })
 });
+$(function(){
 $('#file-upload').on('change',function(e){
 	sound2.play();
 	var file=e.originalEvent.target.files[0];
@@ -242,7 +247,9 @@ $('#file-upload').on('change',function(e){
  		reader.onload=function(evt){
  			socket.emit('createImageMessage',evt.target.result)
  		};
+ 		
  		reader.readAsDataURL(file);
+});	
 });
 $('#send-location').on('click',function(){
 	if(!navigator.geolocation)

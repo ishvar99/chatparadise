@@ -125,7 +125,7 @@ var   app=express(),
           var user=users.removeUser(socket.id);
           if(user){
            socket.to(user.room).emit('updatedUserList',users.getUsersList(user.room));
-           socket.to(user.room).emit('newMessage',generateMessage('Admin',`${user.name} has left!`))
+           socket.to(user.room).emit('newAdminMessage',generateMessage('Admin',`${user.name} has left!`))
           }
       	});
         socket.on('createImageMessage',(image)=>{
