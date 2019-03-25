@@ -24,12 +24,12 @@ var   app=express(),
       // app.get("/*",(req,res)=>{
       //   res.sendFile(path.join(__dirname,'../public/maintainance.html'))
       // });
-      function isLoggedIn(req,res,next){
-        if(req.isAuthenticated()){
-          return next();
-        }
-        return res.redirect('back')
-      }
+      // function isLoggedIn(req,res,next){
+      //   if(req.isAuthenticated()){
+      //     return next();
+      //   }
+      //   return res.redirect('back')
+      // }
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
         socket.on('join',(params,callback)=>{
