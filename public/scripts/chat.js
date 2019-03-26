@@ -32,10 +32,6 @@ var avatarObj={
 var params;
 socket.on('connect',function(){
 	params=$.deparam(window.location.search);
-	 socket.emit('authentication', {username: "John", password: "secret"});
-  socket.on('authenticated', function() {
-    // use the socket as usual
-  });
 	avatar=params.avatar;
 	socket.emit('join',params,function(err){
       if(err){
