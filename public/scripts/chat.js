@@ -4,7 +4,7 @@ function scrollToBottom()
 	var clientHeight= d.prop('clientHeight');
 	var scrollHeight=d.prop('scrollHeight');
 	var scrollTop=d.prop('scrollTop');
-	var newMessage=$('#message-list').children('li:last-child');
+	var newMessage=$('#message-list').children('div:last-child');
 	var messageHeight=newMessage.innerHeight();
 	var prevHeight=newMessage.prev().innerHeight();
 	var totalHeight=scrollTop+clientHeight+messageHeight+prevHeight;
@@ -14,6 +14,7 @@ function scrollToBottom()
 }
 var socket=io();
 var count=0,avatar;
+var loader=$('<img>');
 var avatarObj={
 	Admin:'./admin.png',
 	a1:'./boy.png',
@@ -50,10 +51,20 @@ socket.on('connect',function(){
            })
            $('#users').html(ol);
 	})
+});
+socket.on('loadingMessages',function(i){
+	loader.attr({
+		src: i,
+		width:'300px',
+		height:'150px'
+	});
+	loader.css('margin-left','60px');
+	$('#message-list').append(loader);
 })							
 socket.on('loadMessages',function(users)
 {
 	var template,html;
+	loader.attr('hidden','true');
 	users.forEach((user)=>{
 		if(user.message){
 			if(user.isLink){
@@ -235,15 +246,19 @@ $('#message-form').on('submit',function(e){
     console.log(`got it ${data}`)
 })
 });
-$('#file-upload').on('change',function(e){
+$(function(){
+	$('#file-upload').on('change',function(e){
 	sound2.play();
 	var file=e.originalEvent.target.files[0];
  		var reader=new FileReader();
  		reader.onload=function(evt){
+ 			console.log('uploaded!')
  			socket.emit('createImageMessage',evt.target.result)
  		};
+
  		reader.readAsDataURL(file);
 });	
+});
 $('#send-location').on('click',function(){
 	if(!navigator.geolocation)
 		return alert('Geolocation not supported by your browser!');

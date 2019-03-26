@@ -53,6 +53,7 @@ var   app=express(),
         .then((messages)=>{
              socket.emit('loadMessages',messages);
         });
+        socket.emit('loadingMessages','./Loading_icon.gif');
         });
       	socket.on('createMessage',(message,callback)=>{
       	  var user=users.getUser(socket.id);
