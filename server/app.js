@@ -40,8 +40,8 @@ var   app=express(),
                if(user.name==params.name)
                 return callback('username taken!!')
              })
-             if(params.room!='lovebites')
-              return callback('This room is not yet activated!')
+             // if(params.room!='room1')
+             //  return callback('This room is not yet activated!')
              socket.join(params.room);
              users.removeUser(socket.id);
              users.addUser(socket.id,params.name,params.room,params.avatar,params.gender);
