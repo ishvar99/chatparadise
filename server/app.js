@@ -13,23 +13,11 @@ const express=require('express'),
        {Users}=require('../helpers/users'),
        Message=require('../models/message'),
        bodyParser=require('body-parser'),
-       moment =require('moment'),
-       passport=require('passport'),
-       localStrategy=require('passport-local'),
-       passportLocalMongoose=require('passport-local-mongoose');
+       moment =require('moment');
 var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server),
       users=new Users();
-      // app.get("/*",(req,res)=>{
-      //   res.sendFile(path.join(__dirname,'../public/maintainance.html'))
-      // });
-      // function isLoggedIn(req,res,next){
-      //   if(req.isAuthenticated()){
-      //     return next();
-      //   }
-      //   return res.redirect('back')
-      // }
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
         socket.on('join',(params,callback)=>{
@@ -49,7 +37,7 @@ var   app=express(),
               socket.emit('newAdminMessage',generateMessage('Admin','welcome','Admin'))
         socket.broadcast.to(params.room).emit('newAdminMessage',generateMessage('Admin',`${params.name} has joined!`,'Admin'));
            callback();
-           Message.find({}).sort({createdBy:1})
+           Message.find({room:params.room}).sort({createdBy:1})
         .then((messages)=>{
              socket.emit('loadMessages',messages);
         });
@@ -148,7 +136,7 @@ var   app=express(),
                 socket.broadcast.to(message.room).emit('notificationSound');
               },(err)=>{
                  console.log(err);
-              })      
+              });
              }
             });
       	socket.on('createLocationMessage',(coords)=>{
