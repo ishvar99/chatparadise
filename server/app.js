@@ -3,13 +3,13 @@ const express=require('express'),
       http=require('http'),
       path=require('path'),
       publicPath=path.join(__dirname,'../public'),
-      port=process.env.PORT||3000,
+      port=process.env.PORT||4000,
       {generateMessage}=require('../helpers/message'),
        {generateLocationMessage}=require('../helpers/message'),
        {generateLinkMessage}=require('../helpers/message'),
        {generateImageMessage}=require('../helpers/message'),
        isRealString=require('../helpers/validation'),
-       db=require('../database/db'),
+       connectDB=require('../database/db'),
        {Users}=require('../helpers/users'),
        Message=require('../models/message'),
        bodyParser=require('body-parser'),
@@ -18,6 +18,7 @@ var   app=express(),
       server=http.createServer(app),//behind the scenes it gets called once you call app.listen()
       io=socketIO(server),
       users=new Users();
+      connectDB();
       io.on('connection',(socket)=>{
       	console.log('new user connected!');
         socket.on('join',(params,callback)=>{
